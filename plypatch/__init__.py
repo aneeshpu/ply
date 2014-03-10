@@ -535,10 +535,14 @@ class WorkingRepo(git.Repo):
         if os.path.exists(self._patch_conflict_path):
             return 'restore-in-progress'
 
-        if len(self._applied_patches()) == 0:
+        applied_patches = self._applied_patches()
+        if len(applied_patches) == 0:
             return 'no-patches-applied'
 
-        return 'all-patches-applied'
+        if self.patch_repo.total_no_of_patches() == len(applied_patches):
+            return 'all-patches-applied'
+
+        return "Patches applied partially"
 
     def check_patch_repo(self):
         return self.patch_repo.check()
@@ -781,3 +785,7 @@ class PatchRepo(git.Repo):
 
         lines.append('}')
         return '\n'.join(lines)
+
+    def total_no_of_patches(self):
+        return len(self.patch_names)
+

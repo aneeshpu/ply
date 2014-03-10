@@ -423,6 +423,33 @@ class FunctionalTestCase(unittest.TestCase):
         with self.assertRaises(plypatch.exc.RestoreInProgress):
             self.working_repo.restore()
 
+    def test_abort_after_conflict_should_show_status_as_patches_applied_partially(
+            self):
+        self.write_readme('Now is the time for all good men to come to the'
+                          ' aid of their country.',
+                          commit_msg='There -> Their')
+
+        self.working_repo.save(self.upstream_hash)
+        self.write_readme('Now is the time for all good men to come to the'
+                          ' aid of their country.\nNow is the time for all '
+                          'good men to come to the aid of their country',
+                          commit_msg='Added a second line')
+
+        self.working_repo.save(self.upstream_hash)
+        self.working_repo.reset('HEAD^', hard=True)
+
+        self.write_readme('Now is the time for all good men to come to the'
+                          ' aid of their country.\nNow is the time for all '
+                          'good men to come to the aid of their country. Fin',
+                          commit_msg='Trunk Changed')
+
+        with self.assertRaises(plypatch.git.exc.PatchDidNotApplyCleanly):
+            self.working_repo.restore()
+
+        self.working_repo.abort()
+
+        self.assertEqual("Patches applied partially", self.working_repo.status)
+
 
 if __name__ == '__main__':
     unittest.main()
