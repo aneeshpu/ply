@@ -230,8 +230,10 @@ class StatusCommand(CLICommand):
             die('Restore in progress, use skip or resolve to continue')
         elif status == 'no-patches-applied':
             die('No patches applied')
-        else:
+        elif status == 'all-patches-applied':
             die('All patches applied')
+        else:
+            die(status.replace('-', ' ') + ". Restore aborted")
 
 
 class UnlinkCommand(CLICommand):

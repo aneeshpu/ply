@@ -448,7 +448,7 @@ class FunctionalTestCase(unittest.TestCase):
 
         self.working_repo.abort()
 
-        self.assertEqual("1 out of 2 patches applied", self.working_repo
+        self.assertEqual("1-out-of-2-patches-applied", self.working_repo
             .status)
 
 
