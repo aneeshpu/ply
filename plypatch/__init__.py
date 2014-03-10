@@ -539,10 +539,12 @@ class WorkingRepo(git.Repo):
         if len(applied_patches) == 0:
             return 'no-patches-applied'
 
-        if self.patch_repo.total_no_of_patches() == len(applied_patches):
+        total_no_of_patches = self.patch_repo.total_no_of_patches()
+        if total_no_of_patches == len(applied_patches):
             return 'all-patches-applied'
 
-        return "Patches applied partially"
+        return "%d out of %d patches applied" % (len(
+            applied_patches), total_no_of_patches)
 
     def check_patch_repo(self):
         return self.patch_repo.check()

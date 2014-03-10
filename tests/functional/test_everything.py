@@ -448,7 +448,8 @@ class FunctionalTestCase(unittest.TestCase):
 
         self.working_repo.abort()
 
-        self.assertEqual("Patches applied partially", self.working_repo.status)
+        self.assertEqual("1 out of 2 patches applied", self.working_repo
+            .status)
 
 
 if __name__ == '__main__':
